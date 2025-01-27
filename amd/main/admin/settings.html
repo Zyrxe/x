@@ -2,7 +2,7 @@
 <head>
     <title>Data Table</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="x.css">
+<link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <div class="search-container">
@@ -134,7 +134,7 @@ const KueDB = {
     },
 
     loadDataFromJSON: function() {
-        fetch('admin/json/data.json')
+        fetch('json/data.json')
             .then(response => response.json())
             .then(data => {
                 this.defaultData = data.KueDB.defaultData; // Isi defaultData dengan data dari JSON
@@ -382,7 +382,7 @@ const PlastikDB = {
     },
 
     loadDataFromJSON: function() {
-        fetch('data.json')
+        fetch('json/data.json')
             .then(response => response.json())
             .then(data => {
                 this.defaultData = data.PlastikDB.defaultData; // Isi defaultData dengan data dari JSON
