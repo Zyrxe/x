@@ -2,8 +2,8 @@
 <head>
     <title>Data Table</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="x.css">
-<script src="y.js"></script>
+    <link rel="stylesheet" href="x.css">
+    <script src="js"></script>
 </head>
 <body>
     <div class="search-container">
@@ -53,9 +53,9 @@
             </div>   
             <div class="button-group">
                 <button id="switchButtonKue" onclick="showContent('mainContentKue')"><i class="fas fa-cookie"></i></button>
-                <button onclick="downloadTable()"><i class="fas fa-download"></i></button>
-                <button onclick="triggerUpdateFile()"><i class="fas fa-upload"></i></button>
-                <input type="file" id="fileInput" style="display:none;" onchange="handleFileUpload(event)">
+                <button onclick="downloadTablePlastik()"><i class="fas fa-download"></i></button>
+                <button onclick="triggerUpdateFilePlastik()"><i class="fas fa-upload"></i></button>
+                <input type="file" id="fileInputPlastik" style="display:none;" onchange="handleFileUploadPlastik(event)">
             </div>
         </div>
         <div id="mainContentKue" style="display:none;">
@@ -102,15 +102,14 @@
             </div>   
             <div class="button-group">
                 <button id="switchButtonPlastik" onclick="showContent('mainContent')"><i class="fas fa-shopping-bag"></i></button>
-                <button onclick="downloadTable()"><i class="fas fa-download"></i></button>
-                <button onclick="triggerUpdateFile()"><i class="fas fa-upload"></i></button>
-                <input type="file" id="fileInput" style="display:none;" onchange="handleFileUpload(event)">
+                <button onclick="downloadTableKue()"><i class="fas fa-download"></i></button>
+                <button onclick="triggerUpdateFileKue()"><i class="fas fa-upload"></i></button>
+                <input type="file" id="fileInputKue" style="display:none;" onchange="handleFileUploadKue(event)">
             </div>
         </div>
     </div>
-    <input type="file" id="fileInput" style="display:none;" />
-<script>
-const PlastikDB = {
+    <script>
+      const PlastikDB = {
     dbName: "888888",
     storeName: "88888",
     db: null,
@@ -356,42 +355,42 @@ deleteItemFromDB: function(categoryIndex, itemIndex) {
 };
 
 // Memanggil fungsi untuk membuka database
-PlastikDB.openDB();
+    PlastikDB.openDB();
 
-function triggerUpdateFile() {
-    document.getElementById('fileInput').click();
-}
+        function triggerUpdateFilePlastik() {
+            document.getElementById('fileInputPlastik').click();
+        }
 
-function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (file && file.name.endsWith('.json')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const data = JSON.parse(e.target.result);
-            if (data.PlastikDB && data.PlastikDB.defaultData) {
-                PlastikDB.defaultData = data.PlastikDB.defaultData; // Pastikan untuk mengisi data dengan benar
-                PlastikDB.saveAllToDB();
+        function handleFileUploadPlastik(event) {
+            const file = event.target.files[0];
+            if (file && file.name.endsWith('.json')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = JSON.parse(e.target.result);
+                    if (data.PlastikDB && data.PlastikDB.defaultData) {
+                        PlastikDB.defaultData = data.PlastikDB.defaultData; // Pastikan untuk mengisi data dengan benar
+                        PlastikDB.saveAllToDB();
+                    } else {
+                        alert('Invalid JSON file. Please upload a valid Plastik data file.');
+                    }
+                };
+                reader.readAsText(file);
             } else {
-                alert('Invalid JSON file. Please upload a valid Plastik data file.');
+                alert('Please upload a valid JSON file.');
             }
-        };
-        reader.readAsText(file);
-    } else {
-        alert('Please upload a valid JSON file.');
-    }
-}
+        }
 
-function downloadTable() {
-    const plastikData = { PlastikDB: { defaultData: PlastikDB.defaultData } };
-    const dataStr = JSON.stringify(plastikData, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "plastik_data.json";
-    a.click();
-    URL.revokeObjectURL(url);
-}
+        function downloadTablePlastik() {
+            const plastikData = { PlastikDB: { defaultData: PlastikDB.defaultData } };
+            const dataStr = JSON.stringify(plastikData, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "plastik_data.json";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
 
  
 
@@ -647,44 +646,42 @@ deleteItemFromDB: function(categoryIndex, itemIndex) {
 // Memanggil fungsi untuk membuka database
 KueDB.openDB();
 
-function triggerUpdateFile() {
-    document.getElementById('fileInput').click();
-}
+        function triggerUpdateFileKue() {
+            document.getElementById('fileInputKue').click();
+        }
 
-function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (file && file.name.endsWith('.json')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const data = JSON.parse(e.target.result);
-            if (data.KueDB && data.KueDB.defaultData) {
-                KueDB.defaultData = data.KueDB.defaultData; // Pastikan untuk mengisi data dengan benar
-                KueDB.saveAllToDB();
+        function handleFileUploadKue(event) {
+            const file = event.target.files[0];
+            if (file && file.name.endsWith('.json')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = JSON.parse(e.target.result);
+                    if (data.KueDB && data.KueDB.defaultData) {
+                        KueDB.defaultData = data.KueDB.defaultData; // Pastikan untuk mengisi data dengan benar
+                        KueDB.saveAllToDB();
+                    } else {
+                        alert('Invalid JSON file. Please upload a valid Kue data file.');
+                    }
+                };
+                reader.readAsText(file);
             } else {
-                alert('Invalid JSON file. Please upload a valid Kue data file.');
+                alert('Please upload a valid JSON file.');
             }
-        };
-        reader.readAsText(file);
-    } else {
-        alert('Please upload a valid JSON file.');
-    }
-}
+        }
 
-function downloadTable() {
-    const kueData = { KueDB: { defaultData: KueDB.defaultData } };
-    const dataStr = JSON.stringify(kueData, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "kue_data.json";
-    a.click();
-    URL.revokeObjectURL(url);
-}
+        function downloadTableKue() {
+            const kueData = { KueDB: { defaultData: KueDB.defaultData } };
+            const dataStr = JSON.stringify(kueData, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "kue_data.json";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
 
-
-
-function showContent(contentId) {
+        function showContent(contentId) {
             var plastikContent = document.getElementById('mainContent');
             var kueContent = document.getElementById('mainContentKue');
             if (contentId === 'mainContent') {
@@ -694,9 +691,7 @@ function showContent(contentId) {
                 plastikContent.style.display = 'none';
                 kueContent.style.display = 'block';
             }
-        }
-
-          
-</script>
+        }  
+    </script>
 </body>
 </html>
