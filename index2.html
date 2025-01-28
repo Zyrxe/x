@@ -10,21 +10,21 @@
     </div>
     <div class="container">
         <div id="mainContent">
-            <h1>PLASTIK</h1>
-            <div class="table-container" id="tablePlastik">
-                <table id="dataTablePlastik" class="table-plastik">
+            <h1>KUE</h1>
+            <div class="table-container" id="tableKue">
+                <table id="dataTableKue" class="table-kue">
                     <thead>
                         <tr>
                             <th class="no-column" rowspan="3">NO</th>
                             <th class="detail-barang" colspan="3">DETAIL BARANG</th>
-                            <th class="analisis-pasar" colspan="14">ANALISIS PASAR</th>
+                            <th class="analisis-pasar" colspan="15">ANALISIS PASAR</th>
                         </tr>
                         <tr>
                             <th class="jenis-barang" rowspan="2">UKURAN</th>
                             <th class="kode" colspan="2">KODE</th>
                             <th class="harga" colspan="8">HARGA</th>
                             <th class="stok" colspan="2">STOK</th>
-                            <th class="tanggal" colspan="2">TANGGAL</th>
+                            <th class="tanggal" colspan="3">TANGGAL</th>
                             <th class="aksi" colspan="2">AKSI</th> 
                         </tr>
                         <tr>
@@ -40,6 +40,7 @@
                             <th class="gram-50">50 GRAM</th>
                             <th class="gudang">GUDANG</th>
                             <th class="toko">TOKO</th>
+                            <th class="expayer">EXPAYER</th>
                             <th class="masuk">MASUK</th>
                             <th class="keluar">KELUAR</th>
                             <th class="save">SAVE</th> 
@@ -59,11 +60,11 @@
         </div>
         <div id="mainContentKue" style="display:none;">
 <script>
-const PlastikDB = {
-    dbName: "888888",
-    storeName: "88888",
+const KueDB = {
+    dbName: "xxxxxx",
+    storeName: "yyyyy",
     db: null,
-    defaultData: [], // Kosongkan defaultData
+    defaultData: [],
 
     openDB: function() {
         const request = indexedDB.open(this.dbName, 1);
@@ -87,7 +88,7 @@ const PlastikDB = {
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
-                this.defaultData = data.PlastikDB.defaultData; // Isi defaultData dengan data dari JSON
+                this.defaultData = data.KueDB.defaultData; // Isi defaultData dengan data dari JSON
                 this.loadDataFromDB(); // Muat data dari IndexedDB setelah mengisi defaultData
             })
             .catch(error => console.error('Error loading JSON:', error));
@@ -119,7 +120,7 @@ const PlastikDB = {
 
         transaction.oncomplete = function() {
             console.log("All items saved to IndexedDB.");
-            PlastikDB.loadTableFromHtml();
+            KueDB.loadTableFromHtml();
         };
 
         transaction.onerror = function(event) {
@@ -227,15 +228,15 @@ deleteItemFromDB: function(categoryIndex, itemIndex) {
     },
 
     loadTableFromHtml: function() {
-        const tbody = document.querySelector("#dataTablePlastik tbody");
+        const tbody = document.querySelector("#dataTableKue tbody");
         tbody.innerHTML = '';
 
         this.defaultData.forEach((category, categoryIndex) => {
             const subTitleRow = document.createElement("tr");
             subTitleRow.classList.add("sub-title");
-            subTitleRow.innerHTML = `<td colspan="18">
+            subTitleRow.innerHTML = `<td colspan="19">
                                         ${category.category}
-                                        <button onclick="PlastikDB.addItem(${categoryIndex})">+</button>
+                                        <button onclick="KueDB.addItem(${categoryIndex})">+</button>
                                       </td>`;
             tbody.appendChild(subTitleRow);
 
@@ -248,30 +249,34 @@ deleteItemFromDB: function(categoryIndex, itemIndex) {
                 row.innerHTML = `
                     <td data-category="${categoryIndex}" data-item="${itemIndex}">${itemIndex + 1}</td>
                     <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.BARANG}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.KODE_TOKO}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.KODE_GUDANG}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["DUS/BALL"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["1 PACK"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["1 PCS"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["1000 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["500 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["250 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["100 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["50 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.STOK.GUDANG}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.STOK.TOKO}</td>
+                    <td data-category="${categoryIndex}" data-item="${itemIndex}">•—•</td>
+                    <td data-category="${categoryIndex}" data-item="${itemIndex}">•—•</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["DUS/BALL"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["1 PACK"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["1 PCS"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["1000 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["500 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["250 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["100 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["50 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.STOK.GUDANG}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.STOK.TOKO}</td>
+                    <td>
+                        <input type="date" class="date-input" value="${item.TANGGAL.EXPAYER || today}" 
+                            oninput="KueDB.updateDate(${categoryIndex}, ${itemIndex}, 'EXPAYER', this.value)">
+                    </td>
                     <td>
                         <input type="date" class="date-input" value="${item.TANGGAL.MASUK || today}" 
-                            oninput="PlastikDB.updateDate(${categoryIndex}, ${itemIndex}, 'MASUK', this.value)">
+                            oninput="KueDB.updateDate(${categoryIndex}, ${itemIndex}, 'MASUK', this.value)">
                     </td>
                     <td>
                         <input type="date" class="date-input" value="${item.TANGGAL.KELUAR || today}" 
-                            oninput="PlastikDB.updateDate(${categoryIndex}, ${itemIndex}, 'KELUAR', this.value)">
+                            oninput="KueDB.updateDate(${categoryIndex}, ${itemIndex}, 'KELUAR', this.value)">
                     </td>
                     <td>
-                        <button class="save-button" onclick="PlastikDB.saveItem(${categoryIndex}, ${itemIndex})" style="display:none;">&#9729;</button>
+                        <button class="save-button" onclick="KueDB.saveItem(${categoryIndex}, ${itemIndex})" style="display:none;">&#9729;</button>
                     </td>
-                    <td><button class="delete-button" onclick="PlastikDB.deleteItem(${categoryIndex}, ${itemIndex})">&#128465;</button></td>
+                    <td><button class="delete-button" onclick="KueDB.deleteItem(${categoryIndex}, ${itemIndex})">&#128465;</button></td>
                 `;
                 tbody.appendChild(row);
 
@@ -305,7 +310,7 @@ deleteItemFromDB: function(categoryIndex, itemIndex) {
 };
 
 // Memanggil fungsi untuk membuka database
-PlastikDB.openDB();
+KueDB.openDB();
 
 function triggerUpdateFile() {
     document.getElementById('fileInput').click();
@@ -317,11 +322,11 @@ function handleFileUpload(event) {
         const reader = new FileReader();
         reader.onload = (e) => {
             const data = JSON.parse(e.target.result);
-            if (data.PlastikDB && data.PlastikDB.defaultData) {
-                PlastikDB.defaultData = data.PlastikDB.defaultData; // Pastikan untuk mengisi data dengan benar
-                PlastikDB.saveAllToDB();
+            if (data.KueDB && data.KueDB.defaultData) {
+                KueDB.defaultData = data.KueDB.defaultData; // Pastikan untuk mengisi data dengan benar
+                KueDB.saveAllToDB();
             } else {
-                alert('Invalid JSON file. Please upload a valid Plastik data file.');
+                alert('Invalid JSON file. Please upload a valid Kue data file.');
             }
         };
         reader.readAsText(file);
@@ -331,25 +336,25 @@ function handleFileUpload(event) {
 }
 
 function downloadTable() {
-    const plastikData = { PlastikDB: { defaultData: PlastikDB.defaultData } };
-    const dataStr = JSON.stringify(plastikData, null, 2);
+    const kueData = { KueDB: { defaultData: KueDB.defaultData } };
+    const dataStr = JSON.stringify(kueData, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "plastik_data.json";
+    a.download = "kue_data.json";
     a.click();
     URL.revokeObjectURL(url);
 }
 
  function showContent(contentId) {
-            var plastikContent = document.getElementById('mainContent');
+            var kueContent = document.getElementById('mainContent');
             var kueContent = document.getElementById('mainContentKue');
             if (contentId === 'mainContent') {
-                plastikContent.style.display = 'block';
+                kueContent.style.display = 'block';
                 kueContent.style.display = 'none';
             } else {
-                plastikContent.style.display = 'none';
+                kueContent.style.display = 'none';
                 kueContent.style.display = 'block';
             }
         }
