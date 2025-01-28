@@ -248,18 +248,18 @@ deleteItemFromDB: function(categoryIndex, itemIndex) {
                 row.innerHTML = `
                     <td data-category="${categoryIndex}" data-item="${itemIndex}">${itemIndex + 1}</td>
                     <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.BARANG}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.KODE_TOKO}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.KODE_GUDANG}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["DUS/BALL"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["1 PACK"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["1 PCS"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["1000 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["500 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["250 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["100 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["50 GRAM"]}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.STOK.GUDANG}</td>
-                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.STOK.TOKO}</td>
+                    <td data-category="${categoryIndex}" data-item="${itemIndex}">•—•</td>
+                    <td data-category="${categoryIndex}" data-item="${itemIndex}">•—•</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["DUS/BALL"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["1 PACK"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["1 PCS"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["1000 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["500 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["250 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["100 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.HARGA["50 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.STOK.GUDANG}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}" inputmode="numeric">${item.STOK.TOKO}</td>
                     <td>
                         <input type="date" class="date-input" value="${item.TANGGAL.MASUK || today}" 
                             oninput="PlastikDB.updateDate(${categoryIndex}, ${itemIndex}, 'MASUK', this.value)">
@@ -317,8 +317,12 @@ function handleFileUpload(event) {
         const reader = new FileReader();
         reader.onload = (e) => {
             const data = JSON.parse(e.target.result);
-            PlastikDB.defaultData = data; // Pastikan untuk mengisi data dengan benar
-            PlastikDB.saveAllToDB();
+            if (data.PlastikDB && data.PlastikDB.defaultData) {
+                PlastikDB.defaultData = data.PlastikDB.defaultData; // Pastikan untuk mengisi data dengan benar
+                PlastikDB.saveAllToDB();
+            } else {
+                alert('Invalid JSON file. Please upload a valid Plastik data file.');
+            }
         };
         reader.readAsText(file);
     } else {
@@ -327,7 +331,7 @@ function handleFileUpload(event) {
 }
 
 function downloadTable() {
-    const plastikData = PlastikDB.defaultData;
+    const plastikData = { PlastikDB: { defaultData: PlastikDB.defaultData } };
     const dataStr = JSON.stringify(plastikData, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
